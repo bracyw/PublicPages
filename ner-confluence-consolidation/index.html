@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NER Software — Confluence Consolidation Recommendations</title>
+<style>
+  :root{
+    --paper:#f5f1e8;
+    --paper-2:#eee8d9;
+    --paper-3:#e7dfcc;
+    --ink:#211d16;
+    --ink-soft:#5f5847;
+    --ink-faint:#8a8270;
+    --rule:#d9d0bb;
+    --rule-dark:#b9ae93;
+    --crimson:#9e1b32;
+    --crimson-deep:#701226;
+    --amber:#9a6110;
+    --moss:#48663a;
+    --moss-wash:#e4ead9;
+    --plum:#5d3a66;
+    --serif:"Iowan Old Style","Palatino Nova",Palatino,"Book Antiqua","URW Palladio L",Georgia,serif;
+    --mono:"SF Mono",ui-monospace,"Cascadia Mono",Menlo,Consolas,"DejaVu Sans Mono",monospace;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;
+    background:
+      radial-gradient(1200px 600px at 15% -5%, rgba(158,27,50,.045), transparent 60%),
+      radial-gradient(900px 500px at 110% 8%, rgba(93,58,102,.04), transparent 55%),
+      var(--paper);
+    color:var(--ink);
+    font-family:var(--serif);
+    font-size:16px;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  .tape{
+    height:8px;
+    background:repeating-linear-gradient(-55deg,var(--crimson) 0 14px,var(--ink) 14px 17px,var(--paper) 17px 20px,var(--crimson) 20px 34px);
+  }
+  a{color:var(--crimson-deep);text-decoration-color:rgba(158,27,50,.35);text-underline-offset:2px}
+  a:hover{color:var(--crimson)}
+  .wrap{max-width:1020px;margin:0 auto;padding:0 28px}
+
+  /* ---------- masthead ---------- */
+  .masthead{padding:44px 0 0;border-bottom:3px double var(--rule-dark)}
+  .kicker{
+    display:flex;align-items:center;gap:14px;
+    font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--ink-soft);
+  }
+  .kicker::after{content:"";flex:1;height:1px;background:var(--rule-dark)}
+  .kicker .dot{width:9px;height:9px;background:var(--crimson);border-radius:50%;flex:none}
+  h1{font-size:clamp(32px,5.2vw,54px);line-height:1.03;margin:18px 0 10px;font-weight:600;letter-spacing:-.015em}
+  h1 em{font-style:italic;color:var(--crimson)}
+  .standfirst{max-width:64ch;color:var(--ink-soft);font-size:17px;margin:0 0 8px}
+  .meta{
+    font-family:var(--mono);font-size:11.5px;color:var(--ink-faint);letter-spacing:.04em;
+    display:flex;flex-wrap:wrap;gap:6px 22px;margin:14px 0 26px;
+  }
+  .meta b{color:var(--ink-soft);font-weight:600}
+
+  .stats{display:grid;grid-template-columns:repeat(5,1fr);border-top:1px solid var(--rule-dark)}
+  .stat{padding:16px 14px 20px;border-right:1px solid var(--rule);animation:rise .5s both}
+  .stat:last-child{border-right:0}
+  .stat b{display:block;font-size:34px;line-height:1;font-weight:600;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+  .stat span{display:block;margin-top:7px;font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint)}
+  .stat.red b{color:var(--crimson)}
+  .stat.green b{color:var(--moss)}
+  .stat.plum b{color:var(--plum)}
+  @keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .stat:nth-child(1){animation-delay:.05s}.stat:nth-child(2){animation-delay:.12s}
+  .stat:nth-child(3){animation-delay:.19s}.stat:nth-child(4){animation-delay:.26s}
+  .stat:nth-child(5){animation-delay:.33s}
+
+  /* ---------- nav ---------- */
+  .navbar{
+    position:sticky;top:0;z-index:50;background:rgba(245,241,232,.94);backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--rule-dark);
+  }
+  .navbar .wrap{display:flex;align-items:baseline;gap:20px;overflow-x:auto;padding-top:10px;padding-bottom:10px}
+  .navbar a{
+    font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+    text-decoration:none;color:var(--ink-soft);white-space:nowrap;
+  }
+  .navbar a:hover{color:var(--crimson)}
+  .navbar a b{color:var(--crimson);font-weight:600;margin-right:4px}
+
+  /* ---------- sections ---------- */
+  section{padding:42px 0 8px}
+  .sec-head{display:flex;gap:22px;align-items:flex-start;border-bottom:1px solid var(--rule-dark);padding-bottom:14px;margin-bottom:20px}
+  .sec-num{
+    font-family:var(--mono);font-size:13px;color:var(--paper);background:var(--crimson);
+    padding:5px 9px;letter-spacing:.08em;flex:none;margin-top:5px;
+  }
+  .sec-head h2{margin:0;font-size:28px;font-weight:600;letter-spacing:-.01em}
+  .sec-sub{margin:5px 0 0;color:var(--ink-soft);font-size:15px;max-width:74ch}
+  h3{font-size:14px;font-family:var(--mono);font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft);margin:28px 0 12px}
+
+  .sev{
+    display:inline-grid;place-items:center;width:20px;height:20px;border-radius:3px;
+    font-family:var(--mono);font-size:10.5px;font-weight:700;
+  }
+  .sev-H{background:var(--crimson);color:var(--paper)}
+  .sev-M{background:var(--amber);color:var(--paper)}
+  .sev-L{background:var(--paper-3);color:var(--ink-soft);border:1px solid var(--rule-dark)}
+  .id{font-family:var(--mono);font-size:11px;color:var(--ink-faint);letter-spacing:.02em}
+
+  table{width:100%;border-collapse:collapse;font-size:14.5px}
+  thead th{
+    text-align:left;font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--ink-faint);font-weight:600;padding:0 12px 8px 2px;border-bottom:1px solid var(--rule-dark);
+  }
+  tbody td{padding:10px 12px 10px 2px;border-bottom:1px solid var(--rule);vertical-align:top}
+  tbody tr:hover{background:rgba(158,27,50,.035)}
+  td.c-page{min-width:180px}
+  td.c-page a{font-weight:600}
+  td.c-page .id{display:block;margin-top:2px}
+  td.c-find{color:var(--ink-soft);max-width:60ch}
+  td.c-find b{color:var(--ink)}
+  .when{font-family:var(--mono);font-size:11px;color:var(--ink-faint);white-space:nowrap}
+
+  ul.tight{margin:8px 0;padding-left:20px}
+  ul.tight li{margin:8px 0;color:var(--ink-soft)}
+  ul.tight li b{color:var(--ink)}
+
+  .callout{
+    border:1px solid var(--rule-dark);border-left:4px solid var(--crimson);background:var(--paper-2);
+    padding:14px 20px;margin:18px 0;font-size:14.5px;color:var(--ink-soft);
+  }
+  .callout b{color:var(--ink)}
+  .anchors{
+    border:1px solid var(--rule-dark);border-left:4px solid var(--moss);background:var(--moss-wash);
+    padding:14px 20px;margin:18px 0;font-size:14.5px;color:var(--ink-soft);
+  }
+  .anchors b{color:var(--ink)}
+
+  .opts{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:6px}
+  .opt{border:1px solid var(--rule-dark);background:var(--paper-2);display:flex;flex-direction:column}
+  .opt header{padding:13px 18px;border-bottom:1px solid var(--rule);display:flex;align-items:baseline;gap:10px}
+  .opt header .tag{font-family:var(--mono);font-weight:700;font-size:15px;color:var(--paper);background:var(--ink);padding:3px 9px}
+  .opt.rec header .tag{background:var(--crimson)}
+  .opt header h4{margin:0;font-size:16px}
+  .opt .body{padding:12px 18px 14px;font-size:13.8px;color:var(--ink-soft);flex:1}
+  .opt footer{padding:9px 18px;border-top:1px solid var(--rule);font-family:var(--mono);font-size:10.5px;color:var(--ink-faint);letter-spacing:.05em}
+  .opt footer b{color:var(--ink-soft)}
+  .rec-flag{font-family:var(--mono);font-size:9px;letter-spacing:.14em;color:var(--crimson);text-transform:uppercase;margin-left:auto}
+
+  .trees{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:14px}
+  .tree{border:1px solid var(--rule-dark);background:var(--ink);color:#e8e2d2;padding:16px 18px;overflow-x:auto}
+  .tree h5{margin:0 0 10px;font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#b3ab95;font-weight:600}
+  .tree pre{margin:0;font-family:var(--mono);font-size:11.5px;line-height:1.75;white-space:pre}
+  .tree .bad{color:#e08c99}
+  .tree .good{color:#a9c491}
+  .tree .new{color:#cbb2d6}
+  .tree .dim2{color:#7d775f}
+  .tree.wide{grid-column:1 / -1}
+
+  .conv td:first-child{font-weight:600;white-space:nowrap}
+
+  footer.colophon{
+    margin-top:52px;border-top:3px double var(--rule-dark);padding:22px 0 46px;
+    color:var(--ink-faint);font-size:13px;
+  }
+  footer.colophon p{max-width:82ch;margin:6px 0}
+
+  @media (max-width:880px){
+    .stats{grid-template-columns:repeat(3,1fr)}
+    .stat:nth-child(3){border-right:0}
+    .stat:nth-child(n+4){border-top:1px solid var(--rule)}
+    .opts,.trees{grid-template-columns:1fr}
+  }
+
+  @media print{
+    body{background:#fff;font-size:12px}
+    .navbar{display:none}
+    section{padding:20px 0 4px}
+    .tape{display:none}
+    .stat b{font-size:24px}
+    h1{font-size:30px}
+    .opt,.tree{break-inside:avoid}
+    tbody tr{break-inside:avoid}
+    a{text-decoration:none;color:var(--ink)}
+    td.c-page a{color:var(--crimson-deep)}
+  }
+</style>
+</head>
+<body>
+<div class="tape" aria-hidden="true"></div>
+
+<header class="masthead">
+  <div class="wrap">
+    <p class="kicker"><span class="dot"></span>Northeastern Electric Racing · Software</p>
+    <h1>Confluence Consolidation <em>&amp;</em> Change Recommendations</h1>
+    <p class="standfirst">Software docs live in two homes on our Confluence: the shared <b>car trees</b> (NER25, NER27 …), where every
+    team documents each build cycle and software’s current work is genuinely alive — and a top-level <b>“Software” section</b>, the
+    team’s front door, which froze in 2023–24 and routes to none of it. This is a short proposal to bring the space in line with the
+    2026 Charter — what to archive, what to rename, what to create, and one convention so it stays clean. Nothing has been changed yet.</p>
+    <div class="meta">
+      <span><b>Compiled</b> 13–14 Jul 2026 · read-only review, facts verified against live pages</span>
+      <span><b>Checked against</b> the current (Fall 2026) software roster + Software Charter 2026</span>
+      <span><b>From</b> Wyatt Bracy, Head of Application Software</span>
+    </div>
+    <div class="stats">
+      <div class="stat"><b>39</b><span>Pages in the Software section</span></div>
+      <div class="stat red"><b>33</b><span>Untouched since 2024</span></div>
+      <div class="stat red"><b>0</b><span>Routes from “Software” to live work</span></div>
+      <div class="stat green"><b>8</b><span>Good pages to build on</span></div>
+      <div class="stat plum"><b>3</b><span>Options, smallest first</span></div>
+    </div>
+  </div>
+</header>
+
+<nav class="navbar" aria-label="Sections">
+  <div class="wrap">
+    <a href="#s1"><b>01</b>The problem</a>
+    <a href="#s2"><b>02</b>Recommendation</a>
+    <a href="#s3"><b>03</b>The evidence</a>
+  </div>
+</nav>
+
+<main class="wrap">
+
+  <!-- ============ 01 THE PROBLEM ============ -->
+  <section id="s1">
+    <header class="sec-head">
+      <span class="sec-num">01</span>
+      <div>
+        <h2>The problem, briefly</h2>
+      </div>
+    </header>
+
+    <ul class="tight">
+      <li><b>The car trees work — keep them.</b> The space gives each car generation a shared tree
+        (<a href="https://nerdocs.atlassian.net/wiki/spaces/NER/pages/727252999">NER25</a>,
+        <a href="https://nerdocs.atlassian.net/wiki/spaces/NER/pages/1651179525">NER27</a>) where every team files its cycle work.
+        Mechanical’s and Electrical’s branches sit beside
+        <a href="https://nerdocs.atlassian.net/wiki/spaces/NER/pages/1894416406">“Embedded Software”</a> — the firmware branch, where
+        the 27A cycle is being built right now — and FinishLine’s week-old
+        <a href="https://nerdocs.atlassian.net/wiki/spaces/NER/pages/1918730241">“Web Development”</a> branch. Software has filed its
+        cycle docs this way since NER24.</li>
+      <li><b>The team’s front door froze.</b> The top-level
+        <a href="https://nerdocs.atlassian.net/wiki/spaces/NER/pages/5603329">“Software” section</a> — the evergreen home for
+        onboarding, FAQ, learning resources, FinishLine, and Product — has 33 of its 39 pages untouched since 2024. The onboarding
+        root names heads from two cycles ago, routes to an archived Slack channel, and offers paths for only two of the four
+        subteams; the org page describes a team merge that was later abandoned; and nothing links the car trees. Browsing from
+        “Software” reaches none of the live work.</li>
+      <li><b>The car branches still speak pre-Charter.</b> “Embedded Software” is the old umbrella — its own
+        <a href="https://nerdocs.atlassian.net/wiki/spaces/NER/pages/727384068">25 page</a> defines it as “Firmware – <i>Electrical
+        Team</i> + Applications Software – Software Team,” an org the Charter replaced. Application Software’s docs sit buried inside
+        it, and FinishLine’s branch is titled “Web Development.” A newcomer can’t map the Charter’s four subteams onto the space.</li>
+      <li><b>Cycles supersede but never archive, and titles mislead.</b> Embedded Software 24 sits unarchived beside 25, an empty
+        Odyssey 24A beside a real 25A, and FinishLine’s old branch holds six roadmap cycles side by side. “Web Dev Onboarding” is
+        FinishLine-only; two stale 2024 Launchpads sit in the Software section while the live one (Firmware Launchpad 26-27) lives
+        under NER27; one page has sat in draft since Sep 2024.</li>
+    </ul>
+
+    <div class="callout">
+      <b>The goal is a space that reads correctly when browsed.</b> Years in titles are fine — the problem is the <i>mix</i>, and a
+      front door that goes nowhere. Give each kind of page its home — evergreen in the Software section, cycle work under the car
+      tree — name the branches after the org that exists, and archive superseded pages instead of leaving them as siblings.</div>
+  </section>
+
+  <!-- ============ 02 RECOMMENDATION ============ -->
+  <section id="s2">
+    <header class="sec-head">
+      <span class="sec-num">02</span>
+      <div>
+        <h2>Recommendation</h2>
+        <p class="sec-sub">Three options that stack — each includes everything to its left. B is the ask.</p>
+      </div>
+    </header>
+
+    <div class="opts">
+      <div class="opt">
+        <header><span class="tag">A</span><h4>Housekeeping</h4></header>
+        <div class="body">
+          Archive the frozen layer (list in §03) and rewrite the two entry points — the org page and the onboarding root —
+          <b>in place</b>, since repos link their IDs. Retitle the mislabeled pages. No new structure.
+        </div>
+        <footer><b>Effort</b> ~1 sitting per area · <b>When</b> this week</footer>
+      </div>
+
+      <div class="opt rec">
+        <header><span class="tag">B</span><h4>A front door that routes</h4><span class="rec-flag">The ask</span></header>
+        <div class="body">
+          A, plus: give each kind of page its home. Revive the Software section as the team’s <b>evergreen front door</b> —
+          onboarding index, FAQ, charter — whose standing job is routing to the current car tree. In NER27, gather software’s
+          branches under the Charter’s names — one <b>Software 27</b> with Firmware, App Software, and FinishLine beneath it
+          (Confluence renames and moves keep page IDs, so links don’t break) — create the two genuinely missing pages, and adopt
+          the convention below with a one-hour per-cycle handoff ritual.
+          <i>Cycle docs stay in the car trees: Mechanical and Electrical file there too, and that convention is the part that works.</i>
+        </div>
+        <footer><b>Effort</b> a few hours per subteam · <b>When</b> before fall onboarding</footer>
+      </div>
+
+      <div class="opt">
+        <header><span class="tag">C</span><h4>Align with the 26-27 Vision</h4></header>
+        <div class="body">
+          B becomes the skeleton for the Vision’s restructured onboarding (software-wide intro + technical “droplets,”
+          authored Confluence-first). Mechanical and electrical are already rebuilding their onboarding for 26-27 —
+          this matches that pace.
+        </div>
+        <footer><b>Effort</b> the fall onboarding project · <b>When</b> Sep 2026</footer>
+      </div>
+    </div>
+
+    <h3>The convention</h3>
+    <table class="conv">
+      <tbody>
+        <tr><td>Two kinds of page</td>
+            <td class="c-find"><b>Cycle pages</b> (onboarding flows, rosters, roadmaps, goals) always carry the year — <span class="id">&lt;Subteam&gt; &lt;Topic&gt; 26-27</span> — and live under the car tree, so newest wins. <b>Evergreen pages</b> (setup guides, charters, indexes) never carry a year; they live in the Software section with a “last verified” date in the body.</td></tr>
+        <tr><td>Titles say subteam + topic</td>
+            <td class="c-find">A title must be correct out of context, because search shows it out of context. No more “Web Dev Onboarding.”</td></tr>
+        <tr><td>One current page per topic</td>
+            <td class="c-find">Superseding a page <i>means</i> archiving its predecessor in the same edit. The car branches already year-stamp their cycles — archiving the old one at handoff is the only missing step; the Software section needs both habits.</td></tr>
+        <tr><td>Roles, not names</td>
+            <td class="c-find">Evergreen pages say “the Application Software head,” not a person — people rotate yearly and the roster names them.</td></tr>
+        <tr><td>Per-cycle ritual</td>
+            <td class="c-find">At head turnover: copy cycle pages to the new year, archive the old ones, re-verify evergreen pages. ~1 hour per subteam, once a year — this proposal never has to be written again.</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Before → after</h3>
+    <div class="trees">
+      <div class="tree">
+        <h5>Tree 1 — the “Software” section today</h5>
+        <pre><span class="bad">Software                          Aug 2024 · abandoned org model</span>
+<span class="good">├─ Software Charter 2026          Jun 2026 ✓</span>
+<span class="bad">├─ Software Onboarding            Sep 2024 · frozen root</span>
+<span class="bad">│   ├─ Software FAQ               2024 (Prisma FAQ inside: 2022)</span>
+<span class="bad">│   ├─ Starter Ticket Instructions  Sep 2023</span>
+<span class="bad">│   ├─ LaunchPad                  Feb 2024</span>
+<span class="bad">│   └─ Web Dev Onboarding         FinishLine-only, superseded</span>
+<span class="bad">├─ Software Learning Resources    Mar 2023 · web-dev only</span>
+<span class="bad">├─ Software Product Management    Feb 2023 · predates the subteam</span>
+<span class="bad">├─ Finishline Team                roadmaps 2022→Sp 2025, none archived</span>
+<span class="bad">├─ Launchpad Web Dev              Jul 2024 · a second Launchpad</span>
+<span class="bad">├─ NERSim                         in draft since Sep 2024</span>
+<span class="good">└─ Parametric Vehicle Simulation  Jul 2025 ✓ quietly active</span>
+
+<span class="dim2">33 of 39 pages untouched since 2024.
+No route to the car trees on the right.</span></pre>
+      </div>
+      <div class="tree">
+        <h5>Tree 2 — software in the car trees today</h5>
+        <pre><span class="good">NER27 (this cycle’s shared car tree)</span>
+<span class="dim2">├─ MECHANICAL RAHHHH · ELECTRICAL MEOW   the other teams’ branches</span>
+<span class="good">├─ Embedded Software                     Jun 2026 ✓ 27A being built</span>
+<span class="good">│   ├─ VCU · TSECU · MSB 27A firmware</span>
+<span class="good">│   ├─ Firmware Launchpad 26-27 · Dev Environment</span>
+<span class="good">│   └─ Embedded Validation · Controls</span>
+<span class="good">└─ Web Development                       Jul 2026 · this is FinishLine</span>
+<span class="good">    └─ Finishline Onboarding 26-27</span>
+
+<span class="good">NER25 → Embedded Software 25             Dec 2025 · last cycle</span>
+<span class="good">    ├─ Firmware 25                       ~20 pages, active thru Jun 2026</span>
+<span class="good">    ├─ Applications Software 25          Argos 25 · NERO 25</span>
+<span class="good">    └─ Odyssey 25A · Network Layout</span>
+<span class="bad">NER24 → Embedded Software 24             Sep 2024 · unarchived beside 25</span>
+
+<span class="dim2">Alive — but named for the pre-Charter org,
+and unreachable from “Software”.</span></pre>
+      </div>
+      <div class="tree wide">
+        <h5>After Option B — an evergreen front door, and car branches named for the Charter</h5>
+        <pre><span class="good">Software (the evergreen front door)      rewritten in place — every page routes somewhere current</span>
+<span class="good">├─ Software Charter 2026</span>
+<span class="good">├─ Onboarding index                      evergreen; routes by subteam to the 26-27 pages ↓</span>
+<span class="good">│   ├─ → Finishline Onboarding 26-27     exists — link it</span>
+<span class="new">│   ├─ → App Software Onboarding 26-27   ★ create (nothing beyond the punt exists today)</span>
+<span class="new">│   ├─ → Firmware Onboarding 26-27       merge the 4 entry points</span>
+<span class="good">│   └─ FAQ · Starter Tickets             refreshed, evergreen</span>
+<span class="new">├─ Software Product Team                 ★ create (already in motion)</span>
+<span class="good">├─ Simulation                            NERSim (publish or drop) + Parametric</span>
+<span class="dim2">└─ Archive/                              the 2022–24 layer + superseded cycles (24s beside 25s)</span>
+
+<span class="good">NER27 → </span><span class="new">Software 27                      ⇄ rename &amp; gather the existing branches — page IDs survive</span>
+<span class="new">├─ Firmware                              today’s “Embedded Software”, 27A and all</span>
+<span class="new">├─ Application Software                  Argos · NERO · Odyssey — out from under the “Embedded” label</span>
+<span class="new">└─ FinishLine                            today’s “Web Development”</span></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 03 EVIDENCE ============ -->
+  <section id="s3">
+    <header class="sec-head">
+      <span class="sec-num">03</span>
+      <div>
+        <h2>The evidence</h2>
+        <p class="sec-sub">Every claim was verified against the live page on 13–14 Jul 2026. IDs link to the page; links require NER access.</p>
+      </div>
+    </header>
+
+    <table>
+      <thead><tr><th>Page</th><th>Last touched</th><th>What’s wrong</th><th>Sev</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="c-page"><a href="https://nerdocs.atlassian.net/wiki/spaces/NER/pages/5603329">Software</a> (section root / org page)<span class="id">5603329</span></td>
+          <td class="when">Aug 2024</td>
+          <td class="c-find">Describes a team merge that was later abandoned — contradicts the Charter. Rewrite <b>in place</b>; the org-chart content belongs in the new (currently empty) <a href="https://nerdocs.atlassian.net/wiki/spaces/NER/pages/1935278234">Org Chart</a> page rather than duplicated.</td>
+          <td><span class="sev sev-H">H</span></td>
+        </tr>
+        <tr>
+          <td class="c-page"><a href="https://nerdocs.atlassian.net/wiki/spaces/NER/pages/5079215">Software Onboarding</a> (root)<span class="id">5079215</span></td>
+          <td class="when">Sep 2024</td>
+          <td class="c-find"><b>The highest-value fix.</b> Names the 2023–24 heads and CSE, routes to an archived channel, offers only Firmware + FinishLine paths. Rewrite <b>in place</b> — repo READMEs link this ID.</td>
+          <td><span class="sev sev-H">H</span></td>
+        </tr>
+        <tr>
+          <td class="c-page">Car branches named for the pre-Charter org<span class="id">1894416406 · 1918730241 · 727384068</span></td>
+          <td class="when">Jun–Jul 2026</td>
+          <td class="c-find">NER27’s software branches are “Embedded Software” and “Web Development.” The <a href="https://nerdocs.atlassian.net/wiki/spaces/NER/pages/727384068">Embedded Software 25</a> page still defines the unit as “Firmware – <i>Electrical Team</i> + Applications Software – Software Team” — the org the Charter replaced. Rename to the Charter’s shape (renames keep IDs); Application Software gets its own branch instead of a home under an EE-era label.</td>
+          <td><span class="sev sev-M">M</span></td>
+        </tr>
+        <tr>
+          <td class="c-page"><a href="https://nerdocs.atlassian.net/wiki/spaces/NER/pages/184877191">Finishline Team</a> (branch)<span class="id">184877191</span></td>
+          <td class="when">frozen at Sp 2025</td>
+          <td class="c-find">The only subteam branch in the section — and it stopped mid-2025: six roadmap cycles (2022 → Spring 2025) sit as unarchived siblings, plus 2024 ticket/feature stashes. Keep the current cycle + evergreen system docs; archive the rest.</td>
+          <td><span class="sev sev-M">M</span></td>
+        </tr>
+        <tr>
+          <td class="c-page"><a href="https://nerdocs.atlassian.net/wiki/spaces/NER/pages/13828116">Software Product Management</a><span class="id">13828116 · 25952257</span></td>
+          <td class="when">2022–23</td>
+          <td class="c-find">Predates the Product subteam and never described it. Archive once the new Product Team page lands (already in motion as of 7 Jul).</td>
+          <td><span class="sev sev-M">M</span></td>
+        </tr>
+        <tr>
+          <td class="c-page"><a href="https://nerdocs.atlassian.net/wiki/spaces/NER/pages/538607622">Applications Software Onboarding | Embedded Software</a><span class="id">538607622</span></td>
+          <td class="when">Nov 2025</td>
+          <td class="c-find">Says an onboarding guide “is not possible — your lead will guide you.” The subteam’s <i>only</i> onboarding page — App Software has real system docs in the car trees (Argos 25, NERO 25) but no flow that leads a new member to them. Replace with a real 26-27 flow, then archive.</td>
+          <td><span class="sev sev-M">M</span></td>
+        </tr>
+        <tr>
+          <td class="c-page"><a href="https://nerdocs.atlassian.net/wiki/spaces/NER/pages/528089090">Web Dev Onboarding</a><span class="id">528089090</span></td>
+          <td class="when">Jan 2026</td>
+          <td class="c-find">Actually FinishLine-only; links an archived repo and channel; Node-version strikethrough drift. Superseded by <i>Finishline Onboarding 26-27</i> — archive.</td>
+          <td><span class="sev sev-M">M</span></td>
+        </tr>
+        <tr>
+          <td class="c-page">Superseded cycles never archived<span class="id">418086970 · 418119745 · 615874585</span></td>
+          <td class="when">Sep–Oct 2024</td>
+          <td class="c-find"><i>Embedded Software 24</i> sits beside 25, <i>Application Software 24</i> beside 25, and an <b>empty</b> <i>Odyssey 24A</i> beside a real <a href="https://nerdocs.atlassian.net/wiki/spaces/NER/pages/1017610276">Odyssey 25A</a> — which the Argos README should link instead. The year convention is working; archiving at handoff is the missing half.</td>
+          <td><span class="sev sev-M">M</span></td>
+        </tr>
+        <tr>
+          <td class="c-page">Two stale Launchpads: <a href="https://nerdocs.atlassian.net/wiki/spaces/NER/pages/266928130">LaunchPad</a> + <a href="https://nerdocs.atlassian.net/wiki/spaces/NER/pages/389447703">Launchpad Web Dev</a><span class="id">266928130 · 389447703</span></td>
+          <td class="when">Feb / Jul 2024</td>
+          <td class="c-find">Both 2024, one self-dates “Currently (Spring 2024)” — while the live page (<a href="https://nerdocs.atlassian.net/wiki/spaces/NER/pages/1895235617">Firmware Launchpad 26-27</a>) sits under the NER27 car tree. Archive the pair as historical.</td>
+          <td><span class="sev sev-L">L</span></td>
+        </tr>
+        <tr>
+          <td class="c-page">Firmware onboarding — <b>4 competing entry points</b><span class="id">1343533 · 524451844 · 1427472385 · 1815052291</span></td>
+          <td class="when">2024 – Jun 2026</td>
+          <td class="c-find">Each page is fine; there’s just no canonical start among the four — and none is reachable from the Software section. Merge into one <i>Firmware Onboarding 26-27</i> under NER27’s firmware branch, keeping Environment Setup as its evergreen child.</td>
+          <td><span class="sev sev-L">L</span></td>
+        </tr>
+        <tr>
+          <td class="c-page">Aging evergreen set: <a href="https://nerdocs.atlassian.net/wiki/spaces/NER/pages/5636100">Learning Resources</a> · <a href="https://nerdocs.atlassian.net/wiki/spaces/NER/pages/59637771">Starter Tickets</a> · <a href="https://nerdocs.atlassian.net/wiki/spaces/NER/pages/8749072">Prisma FAQ</a><span class="id">5636100 · 59637771 · 8749072</span></td>
+          <td class="when">2022–23</td>
+          <td class="c-find">Web-dev tutorials only (nothing for firmware, telemetry, Qt, or Rust); 3-year-old starter-ticket instructions; a 2022 stack-specific FAQ nested under the general one. Refresh or archive each.</td>
+          <td><span class="sev sev-L">L</span></td>
+        </tr>
+        <tr>
+          <td class="c-page">NERSim<span class="id">555548685</span></td>
+          <td class="when">draft since Sep 2024</td>
+          <td class="c-find">Stuck in draft for two years while Simulation’s actual activity sits in the sibling <i>Parametric Vehicle Simulation</i> folder. Publish or drop; gather both under one Simulation branch.</td>
+          <td><span class="sev sev-L">L</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="anchors">
+      <b>Already good — build on these, don’t recreate them:</b>
+      <a href="https://nerdocs.atlassian.net/wiki/spaces/NER/pages/1833828362">Software Charter 2026</a> (the org taxonomy; still needs a Head-of-Firmware role added) ·
+      <a href="https://nerdocs.atlassian.net/wiki/spaces/NER/pages/1894416406">Embedded Software</a> (firmware’s living branch under NER27, Jun 2026 — though it names people where the convention would name roles) ·
+      <a href="https://nerdocs.atlassian.net/wiki/spaces/NER/pages/1918861314">Finishline Onboarding 26-27</a> (the model to copy) ·
+      <a href="https://nerdocs.atlassian.net/wiki/spaces/NER/pages/970162178">Applications Software 25</a> (a roster, not a flow) ·
+      <a href="https://nerdocs.atlassian.net/wiki/spaces/NER/pages/1017610276">Odyssey 25A</a> ·
+      <a href="https://nerdocs.atlassian.net/wiki/spaces/NER/pages/524451844">Firmware Environment Setup</a> ·
+      <a href="https://nerdocs.atlassian.net/wiki/spaces/NER/pages/1427472385">Firmware New Member Initial Onboarding</a> ·
+      <a href="https://nerdocs.atlassian.net/wiki/spaces/NER/pages/1815052291">Telemetry Onboarding | Firmware</a>
+    </div>
+  </section>
+
+</main>
+
+<footer class="colophon">
+  <div class="wrap">
+    <p><b>Method:</b> read-only review of the NER Confluence space — the full 39-page tree under “Software”, the space’s top level,
+    and software’s branches of the NER24 / NER25 / NER27 car trees — 13–14 Jul 2026, checked against the current (Fall 2026)
+    software roster and the Software Charter 2026. Volatile facts were re-verified against live pages. Page IDs are cited inline;
+    nothing was modified.</p>
+    <p><b>Caveats:</b> a Slack channel reorg is in flight, so pages rewritten under this proposal should name channels only once the
+    final names land; the 26-27 Vision is explicitly “not set in stone.”</p>
+    <p style="margin-top:14px;font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase">NER Software · internal · Jul 2026</p>
+  </div>
+</footer>
+
+</body>
+</html>

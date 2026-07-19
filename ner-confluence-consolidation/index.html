@@ -197,7 +197,7 @@
     <p class="standfirst">Software docs live in two homes on our Confluence: the shared <b>car trees</b> (NER25, NER27 …), where every
     team documents each build cycle and software’s current work is genuinely alive — and a top-level <b>“Software” section</b>, the
     team’s old front door, which froze in 2023–24 and routes to none of it. We plan annually, around the car — this proposal makes
-    the space say so: <b>one home under the year’s tree</b>, the frozen section archived entirely, a small evergreen set that walks
+    the space say so: <b>one home under the year’s tree</b>, the frozen section archived entirely, a small Shared Resources folder that walks
     forward each year, and one convention so it stays clean. Nothing has been changed yet.</p>
     <div class="meta">
       <span><b>Compiled</b> 13–18 Jul 2026 · read-only review, facts verified against live pages</span>
@@ -263,7 +263,7 @@
     <div class="callout">
       <b>The goal is a space shaped like the way we actually work: annual planning, around the car.</b> Years in titles are fine —
       the problem is the <i>mix</i>, and a front door that goes nowhere. Put everything in the year’s tree, name the branches after
-      the org that exists, keep one small evergreen set that moves forward at handoff, and archive superseded pages instead of
+      the org that exists, keep one small Shared Resources folder that moves forward at handoff, and archive superseded pages instead of
       leaving them as siblings.</div>
   </section>
 
@@ -295,7 +295,7 @@
           already use — with a branch per subteam (<b>Firmware · App Software · FinishLine · Product</b>), <b>onboarding per
           subteam</b> inside each, and a landing page carrying the year’s head, leads, and pick-a-subteam router (a fresh
           snapshot each cycle, like today’s Embedded Software page). Members-only like the rest of NER27 — no parallel public
-          tree to maintain. At each handoff the small evergreen set (env setup, system docs) <b>moves</b> — not copies — into
+          tree to maintain. At each handoff the small <b>Shared Resources</b> folder (env setup, system docs) <b>moves</b> — not copies — into
           the new year’s tree, so page IDs and inbound links survive the walk.
           <i>NERxx is the club’s clock — the season, not just the chassis — so FinishLine’s and Product’s pages belong there as
           much as firmware’s.</i>
@@ -318,17 +318,17 @@
     <table class="conv">
       <tbody>
         <tr><td>Two kinds of page</td>
-            <td class="c-find"><b>Cycle pages</b> (onboarding flows, rosters, roadmaps, project docs) carry the year — <span class="id">&lt;Subteam&gt; &lt;Topic&gt; 26-27</span> — and archive with their tree. <b>Evergreen pages</b> (setup guides, system docs) never carry a year; they <b>move forward</b> into the new year’s tree at handoff. The year-stamp <i>is</i> the archive bit — no judgment calls. The cost of mixing the two is already visible: Embedded Software 25 opens by pointing readers back at the 24A, 22A, and 17D docs for design decisions that still apply.</td></tr>
+            <td class="c-find"><b>Cycle pages</b> (onboarding flows, rosters, roadmaps, project docs) carry the year — <span class="id">&lt;Subteam&gt; &lt;Topic&gt; 26-27</span> — and archive with their tree. <b>Evergreen pages</b> (setup guides, system docs) never carry a year; they live in <b>Shared Resources</b> and <b>move forward</b> into the new year’s tree at handoff. The year-stamp <i>is</i> the archive bit — no judgment calls. The cost of mixing the two is already visible: Embedded Software 25 opens by pointing readers back at the 24A, 22A, and 17D docs for design decisions that still apply.</td></tr>
         <tr><td>Titles say subteam + topic</td>
             <td class="c-find">A title must be correct out of context, because search shows it out of context. No more “Web Dev Onboarding.”</td></tr>
         <tr><td>Two archive triggers</td>
-            <td class="c-find"><b>Supersede:</b> publishing a successor means archiving the predecessor in the same sitting — the missing habit that produced six side-by-side FinishLine roadmaps. <b>Retire:</b> when the car retires, its whole Software branch archives as a unit (evergreen has already walked out). Two live car trees is normal — 25A competed while 27 was designed; three is rot. Never delete: archived pages leave the tree and default search, but direct links still resolve.</td></tr>
+            <td class="c-find"><b>Supersede:</b> publishing a successor means archiving the predecessor in the same sitting — the missing habit that produced six side-by-side FinishLine roadmaps. <b>Retire:</b> when the car retires, its whole Software branch archives as a unit (Shared Resources has already walked out). Two live car trees is normal — 25A competed while 27 was designed; three is rot. Never delete: archived pages leave the tree and default search, but direct links still resolve.</td></tr>
         <tr><td>Names are fine in cycle pages</td>
-            <td class="c-find">A year-stamped page is a snapshot — name the year’s head and leads freely. Only the evergreen set says roles (“the App Software head”), because those pages outlive rosters.</td></tr>
-        <tr><td>Durable links point at evergreen</td>
-            <td class="c-find">Repo READMEs and pinned messages never deep-link cycle pages (new year, new ID). Link evergreen pages — their IDs survive the annual walk — or write the path as text: <span class="id">NER2X → Software → App Software → Onboarding</span>.</td></tr>
+            <td class="c-find">A year-stamped page is a snapshot — name the year’s head and leads freely. Only Shared Resources pages say roles (“the App Software head”), because they outlive rosters.</td></tr>
+        <tr><td>Durable links point at Shared Resources</td>
+            <td class="c-find">Repo READMEs and pinned messages never deep-link cycle pages (new year, new ID). Link Shared Resources pages — their IDs survive the annual walk — or write the path as text: <span class="id">NER2X → Software → App Software → Onboarding</span>.</td></tr>
         <tr><td>Per-cycle ritual</td>
-            <td class="c-find">At handoff: create the new year’s Software branch, move the evergreen set in, write the year’s cycle pages, archive on the two triggers. ~1 hour per subteam, once a year — this proposal never has to be written again.</td></tr>
+            <td class="c-find">At handoff: create the new year’s Software branch, move Shared Resources in, write the year’s cycle pages, archive on the two triggers. ~1 hour per subteam, once a year — this proposal never has to be written again.</td></tr>
       </tbody>
     </table>
 
@@ -383,7 +383,7 @@ and unreachable from “Software”.</span></pre>
 <span class="new">    ├─ App Software                      Argos · NERO · Odyssey — Onboarding 26-27 ★ create (only the punt exists today)</span>
 <span class="new">    ├─ FinishLine                        today’s “Web Development” — Finishline Onboarding 26-27 already fits</span>
 <span class="new">    ├─ Product                           ★ create (already in motion)</span>
-<span class="good">    └─ evergreen set                     env setup · system docs · Charter — moves forward each year; IDs survive the walk</span>
+<span class="good">    └─ Shared Resources                  env setup · system docs · Charter — moves forward each year; IDs survive the walk</span>
 
 <span class="bad">Software (old top-level section)         tombstone the two README-linked roots, then archive the whole section</span>
 <span class="dim2">NER24 software branches                  archive now · NER25’s when the 25A retro wraps</span></pre>
@@ -461,13 +461,13 @@ and unreachable from “Software”.</span></pre>
         <tr>
           <td class="c-page">Firmware onboarding — <b>4 competing entry points</b><span class="id">1343533 · 524451844 · 1427472385 · 1815052291</span></td>
           <td class="when">2024 – Jun 2026</td>
-          <td class="c-find">Each page is fine; there’s just no canonical start among the four — and none is reachable from the Software section. Merge into one <i>Firmware Onboarding 26-27</i> under NER27 → Software → Firmware, keeping Environment Setup in the evergreen set.</td>
+          <td class="c-find">Each page is fine; there’s just no canonical start among the four — and none is reachable from the Software section. Merge into one <i>Firmware Onboarding 26-27</i> under NER27 → Software → Firmware, keeping Environment Setup in Shared Resources.</td>
           <td><span class="sev sev-L">L</span></td>
         </tr>
         <tr>
           <td class="c-page">Aging evergreen set: <a href="https://nerdocs.atlassian.net/wiki/spaces/NER/pages/5636100">Learning Resources</a> · <a href="https://nerdocs.atlassian.net/wiki/spaces/NER/pages/59637771">Starter Tickets</a> · <a href="https://nerdocs.atlassian.net/wiki/spaces/NER/pages/8749072">Prisma FAQ</a><span class="id">5636100 · 59637771 · 8749072</span></td>
           <td class="when">2022–23</td>
-          <td class="c-find">Web-dev tutorials only (nothing for firmware, telemetry, Qt, or Rust); 3-year-old starter-ticket instructions; a 2022 stack-specific FAQ nested under the general one. Refresh what earns a slot in the evergreen set (and move it forward); archive the rest.</td>
+          <td class="c-find">Web-dev tutorials only (nothing for firmware, telemetry, Qt, or Rust); 3-year-old starter-ticket instructions; a 2022 stack-specific FAQ nested under the general one. Refresh what earns a slot in Shared Resources (and move it forward); archive the rest.</td>
           <td><span class="sev sev-L">L</span></td>
         </tr>
         <tr>

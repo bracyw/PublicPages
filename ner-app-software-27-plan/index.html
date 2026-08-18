@@ -48,22 +48,6 @@
 
   section { margin-bottom: 56px; }
 
-  /* timeline */
-  .tl-row {
-    display: flex;
-    align-items: baseline;
-    gap: 20px;
-    padding: 14px 0;
-    border-bottom: 1px solid var(--line);
-  }
-  .tl-row:first-child { border-top: 1px solid var(--line); }
-  .tl-date {
-    flex: 0 0 150px;
-    font-weight: 800;
-    font-size: 16px;
-  }
-  .tl-what { font-size: 17px; font-weight: 500; }
-
   /* seasons */
   h3 {
     font-size: 14px;
@@ -166,15 +150,6 @@
   <p class="subtitle">Season plan — Argos + NERO — Wyatt Bracy, Head</p>
 
   <section>
-    <h2>Key dates</h2>
-    <div class="tl-row"><div class="tl-date">DEC 1, 2026</div><div class="tl-what">Static graphs due — hard deadline</div></div>
-    <div class="tl-row"><div class="tl-date">JAN 1, 2027</div><div class="tl-what">AI-native Slack pipeline due</div></div>
-    <div class="tl-row"><div class="tl-date">APR 1, 2027</div><div class="tl-what">First test day (first drive)</div></div>
-    <div class="tl-row"><div class="tl-date">~APR 21, 2027</div><div class="tl-what">FSAE Electric Michigan</div></div>
-    <div class="tl-row"><div class="tl-date">JUNE 2027</div><div class="tl-what">Formula Hybrid + Electric</div></div>
-  </section>
-
-  <section>
     <h2>Argos</h2>
 
     <div class="season-block fall">
@@ -224,6 +199,13 @@
       <li>Make the UI better</li>
       <li>Lap times</li>
       <li>Better-defined Argos ↔ NERO communication</li>
+      <li>New-member onboarding script (in progress)</li>
+      <li>Drive-modes UI overhaul — Claude + Figma MCP (bulk of NERO's season)</li>
+      <li>Nav controller namespace refactor (JSON-based)</li>
+      <li>Algorithm testing drive mode — better test coverage, not a new subsystem</li>
+      <li>Fault screen overhaul — UI redo + arrow-scroll</li>
+      <li>Separate game/status screen (candidate new-member task)</li>
+      <li>VCU fail-rejection outline on nav selection (candidate new-member task)</li>
     </ul>
     <p class="deferred">Rest of NERO's scope owned by Dev (lead).</p>
   </section>

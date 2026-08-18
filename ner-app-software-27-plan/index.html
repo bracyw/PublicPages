@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>App Software '27 — Season Plan</title>
+<style>
+  :root {
+    --ink: #0a0a0a;
+    --sub: #6b7280;
+    --line: #e5e5e5;
+    --commit: #0f9d58;
+    --maybe: #d97706;
+    --stretch: #2563eb;
+    --off: #7c3aed;
+    --idea: #db2777;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: #ffffff;
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    line-height: 1.45;
+  }
+  .wrap { max-width: 720px; margin: 0 auto; padding: 56px 24px 100px; }
+
+  h1 {
+    font-size: 42px;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    margin: 0 0 8px;
+  }
+  .subtitle {
+    font-size: 17px;
+    color: var(--sub);
+    font-weight: 600;
+    margin: 0 0 48px;
+  }
+
+  h2 {
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    margin: 0 0 20px;
+    padding-top: 8px;
+  }
+
+  section { margin-bottom: 56px; }
+
+  /* timeline */
+  .tl-row {
+    display: flex;
+    align-items: baseline;
+    gap: 20px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .tl-row:first-child { border-top: 1px solid var(--line); }
+  .tl-date {
+    flex: 0 0 150px;
+    font-weight: 800;
+    font-size: 16px;
+  }
+  .tl-what { font-size: 17px; font-weight: 500; }
+
+  /* seasons */
+  h3 {
+    font-size: 14px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin: 0 0 16px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--line);
+  }
+  h3.fall { border-bottom-color: var(--ink); }
+  h3.spring { color: var(--stretch); border-bottom-color: var(--stretch); }
+  h3.later { color: var(--sub); }
+
+  .season-block { margin-bottom: 36px; }
+  .season-list { margin: 0; padding-left: 0; list-style: none; }
+  .season-list li {
+    font-size: 18px;
+    font-weight: 700;
+    padding: 6px 0 6px 18px;
+    border-left: 3px solid var(--line);
+    margin-bottom: 4px;
+  }
+  .season-block.fall .season-list li { border-left-color: var(--ink); }
+  .season-block.spring .season-list li { border-left-color: var(--stretch); }
+  .season-list li .dur {
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--sub);
+    margin-top: 1px;
+  }
+
+  .later-list { padding-left: 20px; font-size: 15px; font-weight: 500; color: var(--sub); margin: 0 0 36px; }
+  .later-list li { margin-bottom: 6px; }
+
+  .notes { font-size: 16px; }
+  .notes li { margin-bottom: 12px; font-weight: 500; }
+  .notes strong { font-weight: 800; }
+
+  ul.plain { padding-left: 20px; font-size: 18px; font-weight: 600; }
+  ul.plain li { margin-bottom: 8px; }
+  p.deferred {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--sub);
+    margin-top: 14px;
+  }
+
+  .idea-block {
+    border-left: 4px solid var(--idea);
+    padding-left: 20px;
+  }
+  .idea-tag {
+    display: inline-block;
+    font-size: 13px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--idea);
+    margin-bottom: 10px;
+  }
+  .idea-block p {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0 0 12px;
+  }
+  .idea-block p.sub { font-size: 15px; font-weight: 500; color: var(--sub); }
+
+  .open-list { list-style: none; margin: 0; padding: 0; font-size: 18px; font-weight: 700; }
+  .open-list li {
+    padding: 14px 0;
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .open-list li:first-child { border-top: 1px solid var(--line); }
+  .open-list .box {
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    border: 2px solid var(--ink);
+    border-radius: 4px;
+    margin-top: 3px;
+  }
+
+  footer {
+    margin-top: 64px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--sub);
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>App Software '27</h1>
+  <p class="subtitle">Season plan — Argos + NERO — Wyatt Bracy, Head</p>
+
+  <section>
+    <h2>Key dates</h2>
+    <div class="tl-row"><div class="tl-date">DEC 1, 2026</div><div class="tl-what">Static graphs due — hard deadline</div></div>
+    <div class="tl-row"><div class="tl-date">JAN 1, 2027</div><div class="tl-what">AI-native Slack pipeline due</div></div>
+    <div class="tl-row"><div class="tl-date">APR 1, 2027</div><div class="tl-what">First test day (first drive)</div></div>
+    <div class="tl-row"><div class="tl-date">~APR 21, 2027</div><div class="tl-what">FSAE Electric Michigan</div></div>
+    <div class="tl-row"><div class="tl-date">JUNE 2027</div><div class="tl-what">Formula Hybrid + Electric</div></div>
+  </section>
+
+  <section>
+    <h2>Argos</h2>
+
+    <div class="season-block fall">
+      <h3 class="fall">Fall</h3>
+      <ul class="season-list">
+        <li>Static graphs — save / upload / overlay-on-live<span class="dur">8 weeks · due Dec 1</span></li>
+        <li>Subscription revamp (#456)<span class="dur">5 weeks</span></li>
+        <li>Scylla↔MQTT security<span class="dur">8 weeks</span></li>
+        <li>Notification reliability guarantees — trigger evals + maybe a watchdog<span class="dur">5 weeks</span></li>
+        <li>Redesigns ×3 — car command, notifications, home page<span class="dur">design only, execution not promised</span></li>
+        <li>AI-native Slack request pipeline<span class="dur">side work — due Jan 1</span></li>
+        <li>New-member onboarding CLI<span class="dur">side work — not on the board</span></li>
+        <li>Context repository<span class="dur">side work — 2 weeks</span></li>
+      </ul>
+    </div>
+
+    <div class="season-block spring">
+      <h3 class="spring">Spring</h3>
+      <ul class="season-list">
+        <li>Replay MVP<span class="dur">12 weeks</span></li>
+        <li>AI-native prototyping factory — main flow<span class="dur">side work — not on the board</span></li>
+      </ul>
+    </div>
+
+    <h3 class="later">Not scheduled</h3>
+    <ul class="later-list">
+      <li>Graph analysis — functions on graph points (maybe)</li>
+      <li>Argos MCP — in-field NL query, 4 weeks (stretch)</li>
+      <li>Custom-built screens #465 (stretch)</li>
+      <li>Handling dashboard (stretch)</li>
+      <li>Car configuration work (stretch)</li>
+      <li>Argos 2 (Flutter) differentiation write-up (side work)</li>
+      <li>LTE integration — Wyatt's side project</li>
+    </ul>
+
+    <ul class="notes">
+      <li><strong>33 weeks</strong> committed across 4 estimated items — confirmed parallel across people, not stacked on one.</li>
+      <li><strong>Fall is loaded:</strong> static graphs + subscription + security + notification reliability = 26 estimated weeks, plus redesigns + 2 side-work items. Spring only carries Replay MVP + the prototyping factory. Depends on real parallel staffing to work.</li>
+      <li><strong>Grafana:</strong> no formal role split — build each feature wherever it's easiest + best long-term.</li>
+      <li><strong>Charybdis rewrite</strong> likely happening this season — someone else's, but a live dependency + risk.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>NERO</h2>
+    <ul class="plain">
+      <li>Make the UI better</li>
+      <li>Lap times</li>
+      <li>Better-defined Argos ↔ NERO communication</li>
+    </ul>
+    <p class="deferred">Rest of NERO's scope owned by Dev (lead).</p>
+  </section>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Delphi — Where your agent's context comes from</title>
+<meta name="description" content="How a Delphi workspace works: workspace.yml, where every file in your clone comes from, and how changes get back to everyone.">
+<meta property="og:title" content="Delphi — Where your agent's context comes from">
+<meta property="og:image" content="slides/cover.png">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='3' fill='%231c2230'/%3E%3Crect x='5' y='5' width='6' height='6' fill='%23b9821f'/%3E%3C/svg%3E">
+<style>
+  :root {
+    --ink: #1c2230;
+    --sub: #5b6475;
+    --line: #e4ded2;
+    --gold: #b9821f;
+    --paper: #f7f4ee;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    background: #fff;
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    line-height: 1.5;
+  }
+  .wrap { max-width: 1480px; margin: 0 auto; padding: 28px 24px 80px; }
+
+  header { display: flex; align-items: flex-end; gap: 24px; flex-wrap: wrap; margin-bottom: 20px; }
+  h1 { font-size: 30px; font-weight: 800; letter-spacing: -0.02em; margin: 0; }
+  .subtitle { font-size: 16px; color: var(--sub); font-weight: 600; margin: 2px 0 0; }
+  .downloads { margin-left: auto; display: flex; gap: 8px; }
+
+  a.btn, button {
+    font: inherit; font-size: 14px; font-weight: 600; color: var(--ink);
+    background: #fff; border: 1px solid var(--line); border-radius: 8px;
+    padding: 8px 14px; cursor: pointer; text-decoration: none; line-height: 1.2; white-space: nowrap;
+  }
+  a.btn:hover, button:hover:not(:disabled) { border-color: var(--gold); }
+  button:disabled { opacity: 0.35; cursor: default; }
+  :focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+
+  /* The slide fills the width, but never so tall that the notes fall off a laptop screen. */
+  .stage {
+    position: relative; margin: 0 auto;
+    width: min(100%, calc((100vh - 230px) * 16 / 9));
+    min-width: min(100%, 640px);
+    aspect-ratio: 16 / 9;
+    background: var(--paper); border: 1px solid var(--line); border-radius: 12px; overflow: hidden;
+    box-shadow: 0 1px 2px rgba(28, 34, 48, 0.06), 0 8px 28px rgba(28, 34, 48, 0.08);
+    user-select: none; cursor: pointer;
+  }
+  .stage img { display: block; width: 100%; height: 100%; object-fit: contain; }
+  .stage:fullscreen { width: 100vw; height: 100vh; border: 0; border-radius: 0; background: #11151d; cursor: default; }
+  .progress { position: absolute; left: 0; bottom: 0; height: 4px; background: var(--gold); transition: width 0.2s; }
+
+  .bar {
+    display: flex; align-items: center; gap: 10px; margin: 14px auto 0;
+    width: min(100%, calc((100vh - 230px) * 16 / 9)); min-width: min(100%, 640px);
+  }
+  .counter { font-size: 14px; color: var(--sub); font-variant-numeric: tabular-nums; min-width: 64px; text-align: center; }
+  .bar .spacer { flex: 1; }
+  .keys { font-size: 13px; color: var(--sub); }
+  kbd { font: 12px ui-monospace, Menlo, Consolas, monospace; border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 4px; padding: 1px 5px; background: #fff; }
+
+  .notes { max-width: 860px; margin: 26px auto 0; }
+  .notes .kicker { font-size: 12px; font-weight: 800; letter-spacing: 0.14em; color: var(--gold); text-transform: uppercase; }
+  .notes h2 { font-family: Georgia, "Times New Roman", serif; font-size: 26px; margin: 4px 0 10px; letter-spacing: -0.01em; }
+  .notes p { font-size: 17px; color: #343b4a; margin: 0; }
+
+  .toc { margin: 48px auto 0; max-width: 1480px; }
+  .toc h3 { font-size: 13px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: var(--sub); margin: 0 0 12px; }
+  .toc ol { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; }
+  .toc button { width: 100%; padding: 0; text-align: left; border: 2px solid transparent; border-radius: 10px; overflow: hidden; background: #fff; }
+  .toc button[aria-current="true"] { border-color: var(--gold); }
+  .toc img { display: block; width: 100%; aspect-ratio: 16 / 9; background: var(--paper); border-bottom: 1px solid var(--line); }
+  .toc span { display: block; padding: 8px 10px 10px; font-size: 13px; font-weight: 600; line-height: 1.35; }
+  .toc span b { color: var(--gold); margin-right: 6px; }
+
+  footer { margin-top: 48px; font-size: 13px; color: var(--sub); }
+  footer a { color: inherit; }
+
+  @media (max-width: 700px) {
+    .keys { display: none; }
+    .downloads { margin-left: 0; }
+    .notes p { font-size: 16px; }
+    .bar { gap: 6px; }
+    a.btn, button { padding: 7px 10px; }
+  }
+  @media (prefers-reduced-motion: reduce) { .progress { transition: none; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <h1>Delphi</h1>
+      <p class="subtitle">Where your agent's context comes from, and how improvements get back to everyone.</p>
+    </div>
+    <div class="downloads">
+      <a class="btn" href="delphi-overview.pdf" download>PDF</a>
+      <a class="btn" href="delphi-overview.pptx" download>PowerPoint</a>
+    </div>
+  </header>
+
+  <div class="stage" id="stage" role="region" aria-roledescription="slideshow" aria-label="Delphi slides">
+    <img id="slide" src="<!--FIRST-->" alt="" draggable="false">
+    <div class="progress" id="progress"></div>
+  </div>
+
+  <div class="bar">
+    <button id="prev" aria-label="Previous slide">&larr; Prev</button>
+    <span class="counter" id="counter" aria-live="polite"></span>
+    <button id="next" aria-label="Next slide">Next &rarr;</button>
+    <span class="spacer"></span>
+    <span class="keys"><kbd>&larr;</kbd> <kbd>&rarr;</kbd> to move, <kbd>F</kbd> full screen</span>
+    <button id="full" aria-label="Full screen">Full screen</button>
+  </div>
+
+  <section class="notes" aria-live="polite">
+    <div class="kicker" id="kicker"></div>
+    <h2 id="title"></h2>
+    <p id="text"></p>
+  </section>
+
+  <nav class="toc" aria-label="All slides">
+    <h3>All slides</h3>
+    <ol id="toc"></ol>
+  </nav>
+
+  <footer>Built from <a href="https://github.com/Northeastern-Electric-Racing/Delphi">Delphi</a> main (961b86b), October 2026. Details: README.md, docs/design.md, docs/goals.md.</footer>
+
+  <noscript><style>.stage, .bar, .notes, .toc { display: none; } figure { margin: 0 0 32px; } figure img { width: 100%; border: 1px solid #e4ded2; }</style>
+<!--NOSCRIPT-->
+  </noscript>
+</div>
+
+<script>
+  const slides = /*SLIDES*/;
+  const $ = (id) => document.getElementById(id);
+  const stage = $("stage"), img = $("slide");
+
+  const thumbs = slides.map((s, i) => {
+    const li = document.createElement("li");
+    const b = document.createElement("button");
+    b.innerHTML = `<img src="${s.src}" alt="" loading="lazy"><span><b>${i + 1}</b></span>`;
+    b.querySelector("span").append(s.title);
+    b.setAttribute("aria-label", `Slide ${i + 1}: ${s.title}`);
+    b.addEventListener("click", () => { show(i); stage.scrollIntoView({ behavior: "smooth", block: "center" }); });
+    li.append(b);
+    $("toc").append(li);
+    return b;
+  });
+
+  let cur = 0;
+  function show(i) {
+    cur = Math.max(0, Math.min(slides.length - 1, i));
+    const s = slides[cur];
+    img.src = s.src;
+    img.alt = `${s.title}. ${s.notes}`;
+    $("counter").textContent = `${cur + 1} / ${slides.length}`;
+    $("kicker").textContent = s.kicker;
+    $("title").textContent = s.title;
+    $("text").textContent = s.notes;
+    $("progress").style.width = `${((cur + 1) / slides.length) * 100}%`;
+    $("prev").disabled = cur === 0;
+    $("next").disabled = cur === slides.length - 1;
+    thumbs.forEach((b, j) => b.setAttribute("aria-current", String(j === cur)));
+    history.replaceState(null, "", `#${cur + 1}`);
+  }
+
+  const full = () => (document.fullscreenElement ? document.exitFullscreen() : stage.requestFullscreen?.());
+  $("prev").addEventListener("click", () => show(cur - 1));
+  $("next").addEventListener("click", () => show(cur + 1));
+  $("full").addEventListener("click", full);
+  // Click the left third to go back, anywhere else to go forward.
+  stage.addEventListener("click", (e) => {
+    const r = stage.getBoundingClientRect();
+    show(e.clientX - r.left < r.width / 3 ? cur - 1 : cur + 1);
+  });
+  let x0 = null;
+  stage.addEventListener("touchstart", (e) => (x0 = e.touches[0].clientX), { passive: true });
+  stage.addEventListener("touchend", (e) => {
+    const dx = e.changedTouches[0].clientX - x0;
+    if (Math.abs(dx) > 40) { e.preventDefault(); show(cur + (dx < 0 ? 1 : -1)); }
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    if (["ArrowRight", "PageDown", " "].includes(e.key)) { e.preventDefault(); show(cur + 1); }
+    else if (["ArrowLeft", "PageUp"].includes(e.key)) { e.preventDefault(); show(cur - 1); }
+    else if (e.key === "Home") show(0);
+    else if (e.key === "End") show(slides.length - 1);
+    else if (e.key === "f" || e.key === "F") full();
+  });
+  window.addEventListener("hashchange", () => show((parseInt(location.hash.slice(1), 10) || 1) - 1));
+
+  slides.forEach((s) => { new Image().src = s.src; }); // so moving between slides is instant
+  show((parseInt(location.hash.slice(1), 10) || 1) - 1);
+</script>
+</body>
+</html>
